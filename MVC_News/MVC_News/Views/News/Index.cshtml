@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MVC_News.Models.NewsItem>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container">
+    <h1>News</h1>
+    @if(User.IsInRole("admin")){
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+    <form asp-action="Index" asp-controller="News">
+        <select id="CategoryId" name="CategoryId" asp-items="ViewBag.Categories">
+            <option>All</option>
+        </select>
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </form>
+   
+    @foreach(var item in Model)
+    {
+        <div class="border border-info my-5">
+            <div class="row">
+                <div class="col-3">
+                    <img src="/images/@item.ImgSrc" class="img-fluid" alt="@item.Title" />
+                </div>
+                <div class="col-9">
+                    <a asp-action="details" asp-route-id="@item.Id">
+                        <h3>
+                        @Html.DisplayFor(modelItem => item.Title)
+                        </h3>
+                    </a>
+                    <p>
+                        Latest Update: @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </p>
+                    <p>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </p>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+
+                        <span>|</span>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </div>
+            </div>
+            
+        </div>
+        
+    }
+    
+</div>
